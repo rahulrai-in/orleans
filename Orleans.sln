@@ -3,7 +3,37 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrleansInterfaces", "OrleansInterfaces\OrleansInterfaces.csproj", "{068B4D4E-C746-4775-AF2B-B611F9BFC1B8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrleansClasses", "OrleansClasses\OrleansClasses.csproj", "{28886D0C-D8B5-40E1-8486-BE9AD60057DD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrleansTestHost", "OrleansTestHost\OrleansTestHost.csproj", "{956899B6-80FD-40F9-9102-4A98895658F6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrleansWebApplicaton", "OrleansWebApplicaton\OrleansWebApplicaton.csproj", "{778F4D00-6BB8-43C4-808A-FDD11FBB15AC}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{068B4D4E-C746-4775-AF2B-B611F9BFC1B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{068B4D4E-C746-4775-AF2B-B611F9BFC1B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{068B4D4E-C746-4775-AF2B-B611F9BFC1B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{068B4D4E-C746-4775-AF2B-B611F9BFC1B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28886D0C-D8B5-40E1-8486-BE9AD60057DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28886D0C-D8B5-40E1-8486-BE9AD60057DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28886D0C-D8B5-40E1-8486-BE9AD60057DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28886D0C-D8B5-40E1-8486-BE9AD60057DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{956899B6-80FD-40F9-9102-4A98895658F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{956899B6-80FD-40F9-9102-4A98895658F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{956899B6-80FD-40F9-9102-4A98895658F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{956899B6-80FD-40F9-9102-4A98895658F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{778F4D00-6BB8-43C4-808A-FDD11FBB15AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{778F4D00-6BB8-43C4-808A-FDD11FBB15AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{778F4D00-6BB8-43C4-808A-FDD11FBB15AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{778F4D00-6BB8-43C4-808A-FDD11FBB15AC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
