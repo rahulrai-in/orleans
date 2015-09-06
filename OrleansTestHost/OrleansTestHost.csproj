@@ -95,6 +95,7 @@
   <ItemGroup>
     <Content Include="DevTestClientConfiguration.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="DevTestServerConfiguration.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -102,6 +103,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\OrleansClasses\OrleansClasses.csproj">
+      <Project>{28886d0c-d8b5-40e1-8486-be9ad60057dd}</Project>
+      <Name>OrleansClasses</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OrleansInterfaces\OrleansInterfaces.csproj">
+      <Project>{068b4d4e-c746-4775-af2b-b611f9bfc1b8}</Project>
+      <Name>OrleansInterfaces</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

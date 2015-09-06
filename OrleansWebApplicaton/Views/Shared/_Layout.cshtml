@@ -1,44 +1,89 @@
-﻿<!DOCTYPE html>
+﻿@using OrleansWebApplicaton.Helper
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>Experiment on rahulrai.in</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
-
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" />
 </head>
-<body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+<body style="padding: 5px;">
+    <style>
+        .row {
+            overflow: hidden;
+        }
+
+        [class*="col-"] {
+            margin-bottom: -99999px;
+            padding-bottom: 99999px;
+        }
+    </style>
+    <h2>
+        Microsoft Orleans Demo by Rahul Rai from <a href="http://rahulrai.in">http://rahulrai.in</a>
+    </h2>
+    <hr />
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12 text-center">
+                <h1 style="font-weight: bolder;">
+                    Hi, Device @Routines.GetIPAddress()!
+                </h1>
             </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                </ul>
-                @Html.Partial("_LoginPartial")
+        </div>
+        <div class="row">
+            <div class="col-sm-6 text-center" style="border-right: 2px solid gray;">
+                <h3>Time Left in Aggregator Grain Query</h3>
+                <h3><span id="countdown"></span> Seconds</h3>
+            </div>
+            <div class="col-sm-6 text-center">
+                <h3>Command Status</h3>
+                <h3><span id="status">Waiting For Input</span></h3>
             </div>
         </div>
     </div>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>
-    </div>
-
+    <hr />
+    @RenderBody()
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+    <script language="javascript">
+        var timeoutHandle;
+        var timeLimit = 20;
+        var currentTime = 0;
+        var callAggregatorGrain = function () {
+            if (currentTime > 0) {
+                document.getElementById("countdown").innerText = currentTime;
+                currentTime -= 1;
+            } else {
+                clearTimeout(timeoutHandle);
+                currentTime = timeLimit;
+                timeoutHandle = window.setInterval(callAggregatorGrain, 1000);
+            }
+        };
+        $(function () {
+            $("#colorSelector li").click(function () {
+                var text = $(this).text().trim();
+                document.getElementById("status").innerText = "Activating Grain @Routines.GetIPAddress() with value: " + text;
+                return false;
+            });
+        });
+        $(document).ready(function () {
+            $(".dropdown").click(function () {
+                $(this).find(".dropdown-menu").slideToggle("fast");
+            });
+        });
+        $(document).on("click", function (event) {
+            var $trigger = $(".dropdown");
+            if ($trigger !== event.target && !$trigger.has(event.target).length) {
+                $(".dropdown-menu").slideUp("fast");
+            }
+        });
+        $(function () {
+            currentTime = timeLimit;
+            timeoutHandle = window.setInterval(callAggregatorGrain, 1000);
+        });
+    </script>
 </body>
 </html>

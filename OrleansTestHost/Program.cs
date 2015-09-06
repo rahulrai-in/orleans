@@ -51,6 +51,12 @@ namespace OrleansTestHost
             Console.WriteLine("Orleans Silo is running.\nPress Enter to terminate...");
             Console.ReadLine();
 
+            //// Test Code Starts
+            
+
+
+            //// Test Code Ends
+
             hostDomain.DoCallBack(ShutdownSilo);
         }
 

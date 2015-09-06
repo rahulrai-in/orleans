@@ -24,6 +24,9 @@ namespace OrleansInterfaces
     using System.Runtime.Serialization.Formatters.Binary;
     using System.IO;
     using System.Collections.Generic;
+    using System.Reflection;
+    using Orleans.Serialization;
+    using OrleansInterfaces;
     using Orleans;
     using Orleans.Runtime;
     using Orleans.Core;
@@ -37,15 +40,15 @@ namespace OrleansInterfaces
         
 
                         [System.Obsolete("This method has been deprecated. Please use GrainFactory.GetGrain<IAggregatorGrain> instead.")]
-                        public static IAggregatorGrain GetGrain(long primaryKey, string keyExt)
+                        public static IAggregatorGrain GetGrain(System.String primaryKey)
                         {
-                            return Cast(global::Orleans.CodeGeneration.GrainFactoryBase.MakeKeyExtendedGrainReferenceInternal(typeof(IAggregatorGrain), primaryKey, keyExt));
+                            return Cast(global::Orleans.CodeGeneration.GrainFactoryBase.MakeGrainReferenceInternal(typeof(IAggregatorGrain), primaryKey));
                         }
 
                         [System.Obsolete("This method has been deprecated. Please use GrainFactory.GetGrain<IAggregatorGrain> instead.")]
-                        public static IAggregatorGrain GetGrain(long primaryKey, string keyExt, string grainClassNamePrefix)
+                        public static IAggregatorGrain GetGrain(System.String primaryKey, string grainClassNamePrefix)
                         {
-                            return Cast(global::Orleans.CodeGeneration.GrainFactoryBase.MakeKeyExtendedGrainReferenceInternal(typeof(IAggregatorGrain), primaryKey, keyExt, grainClassNamePrefix));
+                            return Cast(global::Orleans.CodeGeneration.GrainFactoryBase.MakeGrainReferenceInternal(typeof(IAggregatorGrain), primaryKey, grainClassNamePrefix));
                         }
 
             public static IAggregatorGrain Cast(global::Orleans.Runtime.IAddressable grainRef)
@@ -116,7 +119,8 @@ namespace OrleansInterfaces
             
             public override bool IsCompatible(int interfaceId)
             {
-                return (interfaceId == this.InterfaceId);
+                return ((interfaceId == this.InterfaceId) 
+                            || (interfaceId == -1277021679));
             }
             
             protected override string GetMethodName(int interfaceId, int methodId)
@@ -124,10 +128,16 @@ namespace OrleansInterfaces
                 return AggregatorGrainMethodInvoker.GetMethodName(interfaceId, methodId);
             }
             
-            System.Threading.Tasks.Task<string> OrleansInterfaces.IAggregatorGrain.GetColor()
+            System.Threading.Tasks.Task<OrleansInterfaces.GrainInformation> OrleansInterfaces.IAggregatorGrain.GetGrainInformation(int @position)
             {
 
-                return base.InvokeMethodAsync<System.String>(1567424079, null );
+                return base.InvokeMethodAsync<OrleansInterfaces.GrainInformation>(-274381691, new object[] {@position} );
+            }
+            
+            System.Threading.Tasks.Task OrleansInterfaces.IAggregatorGrain.SetColor(OrleansInterfaces.GrainInformation @grainInformation)
+            {
+
+                return base.InvokeMethodAsync<object>(937813785, new object[] {@grainInformation} );
             }
         }
     }
@@ -156,8 +166,15 @@ namespace OrleansInterfaces
                     case -720626290:  // IAggregatorGrain
                         switch (methodId)
                         {
-                            case 1567424079: 
-                                return ((IAggregatorGrain)grain).GetColor().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -274381691: 
+                                return ((IAggregatorGrain)grain).GetGrainInformation((Int32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 937813785: 
+                                return ((IAggregatorGrain)grain).SetColor((GrainInformation)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            default: 
+                            throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
+                        }case -1277021679:  // IGrainWithStringKey
+                        switch (methodId)
+                        {
                             default: 
                             throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
                         }
@@ -182,9 +199,18 @@ namespace OrleansInterfaces
                 case -720626290:  // IAggregatorGrain
                     switch (methodId)
                     {
-                        case 1567424079:
-                            return "GetColor";
+                        case -274381691:
+                            return "GetGrainInformation";
+                    case 937813785:
+                            return "SetColor";
                     
+                        default: 
+                            throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
+                    }
+                case -1277021679:  // IGrainWithStringKey
+                    switch (methodId)
+                    {
+                        
                         default: 
                             throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
                     }
@@ -357,6 +383,233 @@ namespace OrleansInterfaces
                 default:
                     throw new System.InvalidCastException("interfaceId="+interfaceId);
             }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Orleans-CodeGenerator", "1.0.9.0")]
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute()]
+    public class DeviceGrainFactory
+    {
+        
+
+                        [System.Obsolete("This method has been deprecated. Please use GrainFactory.GetGrain<IDeviceGrain> instead.")]
+                        public static IDeviceGrain GetGrain(System.String primaryKey)
+                        {
+                            return Cast(global::Orleans.CodeGeneration.GrainFactoryBase.MakeGrainReferenceInternal(typeof(IDeviceGrain), primaryKey));
+                        }
+
+                        [System.Obsolete("This method has been deprecated. Please use GrainFactory.GetGrain<IDeviceGrain> instead.")]
+                        public static IDeviceGrain GetGrain(System.String primaryKey, string grainClassNamePrefix)
+                        {
+                            return Cast(global::Orleans.CodeGeneration.GrainFactoryBase.MakeGrainReferenceInternal(typeof(IDeviceGrain), primaryKey, grainClassNamePrefix));
+                        }
+
+            public static IDeviceGrain Cast(global::Orleans.Runtime.IAddressable grainRef)
+            {
+                
+                return DeviceGrainReference.Cast(grainRef);
+            }
+        
+        [System.CodeDom.Compiler.GeneratedCodeAttribute("Orleans-CodeGenerator", "1.0.9.0")]
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute()]
+        [System.SerializableAttribute()]
+        [global::Orleans.CodeGeneration.GrainReferenceAttribute("OrleansInterfaces.IDeviceGrain")]
+        internal class DeviceGrainReference : global::Orleans.Runtime.GrainReference, global::Orleans.Runtime.IAddressable, OrleansInterfaces.IDeviceGrain
+        {
+            
+
+            public static IDeviceGrain Cast(global::Orleans.Runtime.IAddressable grainRef)
+            {
+                
+                return (IDeviceGrain) global::Orleans.Runtime.GrainReference.CastInternal(typeof(IDeviceGrain), (global::Orleans.Runtime.GrainReference gr) => { return new DeviceGrainReference(gr);}, grainRef, -2105953344);
+            }
+            
+            protected internal DeviceGrainReference(global::Orleans.Runtime.GrainReference reference) : 
+                    base(reference)
+            {
+            }
+            
+            protected internal DeviceGrainReference(SerializationInfo info, StreamingContext context) : 
+                    base(info, context)
+            {
+            }
+            
+            protected override int InterfaceId
+            {
+                get
+                {
+                    return -2105953344;
+                }
+            }
+            
+            public override string InterfaceName
+            {
+                get
+                {
+                    return "OrleansInterfaces.IDeviceGrain";
+                }
+            }
+            
+            [global::Orleans.CodeGeneration.CopierMethodAttribute()]
+            public static object _Copier(object original)
+            {
+                DeviceGrainReference input = ((DeviceGrainReference)(original));
+                return ((DeviceGrainReference)(global::Orleans.Runtime.GrainReference.CopyGrainReference(input)));
+            }
+            
+            [global::Orleans.CodeGeneration.SerializerMethodAttribute()]
+            public static void _Serializer(object original, global::Orleans.Serialization.BinaryTokenStreamWriter stream, System.Type expected)
+            {
+                DeviceGrainReference input = ((DeviceGrainReference)(original));
+                global::Orleans.Runtime.GrainReference.SerializeGrainReference(input, stream, expected);
+            }
+            
+            [global::Orleans.CodeGeneration.DeserializerMethodAttribute()]
+            public static object _Deserializer(System.Type expected, global::Orleans.Serialization.BinaryTokenStreamReader stream)
+            {
+                return DeviceGrainReference.Cast(((global::Orleans.Runtime.GrainReference)(global::Orleans.Runtime.GrainReference.DeserializeGrainReference(expected, stream))));
+            }
+            
+            public override bool IsCompatible(int interfaceId)
+            {
+                return ((interfaceId == this.InterfaceId) 
+                            || (interfaceId == -1277021679));
+            }
+            
+            protected override string GetMethodName(int interfaceId, int methodId)
+            {
+                return DeviceGrainMethodInvoker.GetMethodName(interfaceId, methodId);
+            }
+            
+            System.Threading.Tasks.Task OrleansInterfaces.IDeviceGrain.SetColor(string @colorName)
+            {
+
+                return base.InvokeMethodAsync<object>(-1860597175, new object[] {@colorName} );
+            }
+            
+            System.Threading.Tasks.Task<string> OrleansInterfaces.IDeviceGrain.GetColor()
+            {
+
+                return base.InvokeMethodAsync<System.String>(1567424079, null );
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Orleans-CodeGenerator", "1.0.9.0")]
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute()]
+    [global::Orleans.CodeGeneration.MethodInvokerAttribute("OrleansInterfaces.IDeviceGrain", -2105953344)]
+    internal class DeviceGrainMethodInvoker : global::Orleans.CodeGeneration.IGrainMethodInvoker
+    {
+        
+        int global::Orleans.CodeGeneration.IGrainMethodInvoker.InterfaceId
+        {
+            get
+            {
+                return -2105953344;
+            }
+        }
+        
+        global::System.Threading.Tasks.Task<object> global::Orleans.CodeGeneration.IGrainMethodInvoker.Invoke(global::Orleans.Runtime.IAddressable grain, int interfaceId, int methodId, object[] arguments)
+        {
+
+            try
+            {                    if (grain == null) throw new System.ArgumentNullException("grain");
+                switch (interfaceId)
+                {
+                    case -2105953344:  // IDeviceGrain
+                        switch (methodId)
+                        {
+                            case -1860597175: 
+                                return ((IDeviceGrain)grain).SetColor((String)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1567424079: 
+                                return ((IDeviceGrain)grain).GetColor().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            default: 
+                            throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
+                        }case -1277021679:  // IGrainWithStringKey
+                        switch (methodId)
+                        {
+                            default: 
+                            throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
+                        }
+                    default:
+                        throw new System.InvalidCastException("interfaceId="+interfaceId);
+                }
+            }
+            catch(Exception ex)
+            {
+                var t = new System.Threading.Tasks.TaskCompletionSource<object>();
+                t.SetException(ex);
+                return t.Task;
+            }
+        }
+        
+        public static string GetMethodName(int interfaceId, int methodId)
+        {
+
+            switch (interfaceId)
+            {
+                
+                case -2105953344:  // IDeviceGrain
+                    switch (methodId)
+                    {
+                        case -1860597175:
+                            return "SetColor";
+                    case 1567424079:
+                            return "GetColor";
+                    
+                        default: 
+                            throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
+                    }
+                case -1277021679:  // IGrainWithStringKey
+                    switch (methodId)
+                    {
+                        
+                        default: 
+                            throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
+                    }
+
+                default:
+                    throw new System.InvalidCastException("interfaceId="+interfaceId);
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Orleans-CodeGenerator", "1.0.9.0")]
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute()]
+    [global::Orleans.CodeGeneration.RegisterSerializerAttribute()]
+    internal class OrleansInterfaces_GrainInformationSerialization
+    {
+        
+        static OrleansInterfaces_GrainInformationSerialization()
+        {
+            Register();
+        }
+        
+        public static object DeepCopier(object original)
+        {
+            return original;
+        }
+        
+        public static void Serializer(object untypedInput, Orleans.Serialization.BinaryTokenStreamWriter stream, System.Type expected)
+        {
+            OrleansInterfaces.GrainInformation input = ((OrleansInterfaces.GrainInformation)(untypedInput));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.DeviceId, stream, typeof(string));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.Time, stream, typeof(System.DateTime));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.Value, stream, typeof(string));
+        }
+        
+        public static object Deserializer(System.Type expected, global::Orleans.Serialization.BinaryTokenStreamReader stream)
+        {
+            OrleansInterfaces.GrainInformation result = new OrleansInterfaces.GrainInformation();
+            result.DeviceId = ((string)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(string), stream)));
+            result.Time = ((System.DateTime)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(System.DateTime), stream)));
+            result.Value = ((string)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(string), stream)));
+            return result;
+        }
+        
+        public static void Register()
+        {
+            global::Orleans.Serialization.SerializationManager.Register(typeof(OrleansInterfaces.GrainInformation), DeepCopier, Serializer, Deserializer);
         }
     }
 }

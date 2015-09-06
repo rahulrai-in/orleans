@@ -2,8 +2,12 @@
 {
     using System.Threading.Tasks;
 
-    public interface IDeviceGrain
+    using Orleans;
+
+    public interface IDeviceGrain : IGrainWithStringKey
     {
         Task SetColor(string colorName);
+
+        Task<string> GetColor();
     }
 }

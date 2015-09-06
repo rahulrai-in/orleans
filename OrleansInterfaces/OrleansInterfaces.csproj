@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GrainInformation.cs" />
     <Compile Include="IAggregatorGrain.cs" />
     <Compile Include="IDecodeGrain.cs" />
     <Compile Include="IDeviceGrain.cs" />

@@ -46,7 +46,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AggregatorGrain.cs" />
+    <Compile Include="AggregatorGrainState.cs" />
     <Compile Include="DecodeGrain.cs" />
+    <Compile Include="DeviceGrain.cs" />
+    <Compile Include="DeviceGrainState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\orleans.codegen.cs" />
   </ItemGroup>

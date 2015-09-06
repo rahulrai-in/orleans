@@ -4,8 +4,10 @@
 
     using Orleans;
 
-    public interface IAggregatorGrain : IGrainWithIntegerCompoundKey
+    public interface IAggregatorGrain : IGrainWithStringKey
     {
-        Task<string> GetColor();
+        Task<GrainInformation> GetGrainInformation(int position);
+
+        Task SetColor(GrainInformation grainInformation);
     }
 }
