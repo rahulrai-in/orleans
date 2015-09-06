@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experiment on rahulrai.in</title>
+    <title>Experiment for rahulrai.in</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -21,9 +21,15 @@
         }
     </style>
     <h2>
-        Microsoft Orleans Demo by Rahul Rai from <a href="http://rahulrai.in">http://rahulrai.in</a>
+        Microsoft Orleans Experiment by Rahul Rai for <a href="http://rahulrai.in" target="_blank">rahulrai.in</a>
     </h2>
+    <h4>
+        My Blog on This Experiment is Available <a href="http://rahulrai.in" target="_blank">Here</a>
+    </h4>
     <hr />
+    <div class="visible-xs">
+        <h1>I don't think so that this experiment works on smaller screens. Please revisit this page with a higher resolution device.</h1>
+    </div>
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-12 text-center">
@@ -34,8 +40,8 @@
         </div>
         <div class="row">
             <div class="col-sm-6 text-center" style="border-right: 2px solid gray;">
-                <h3>Time Left in Aggregator Grain Query</h3>
-                <h3><span id="countdown"></span> Seconds</h3>
+                <h3>Aggregator Grain Query Countdown</h3>
+                <h3>Next call in <span id="countdown"></span> Seconds for Queue Position <span id="queuePosition"></span></h3>
             </div>
             <div class="col-sm-6 text-center">
                 <h3>Command Status</h3>
@@ -50,16 +56,38 @@
     @RenderSection("scripts", required: false)
     <script language="javascript">
         var timeoutHandle;
-        var timeLimit = 20;
+        var timeLimit = 5;
         var currentTime = 0;
+        var queuePosition = 0;
         var callAggregatorGrain = function () {
             if (currentTime > 0) {
                 document.getElementById("countdown").innerText = currentTime;
+                document.getElementById("queuePosition").innerText = queuePosition;
                 currentTime -= 1;
             } else {
                 clearTimeout(timeoutHandle);
                 currentTime = timeLimit;
-                timeoutHandle = window.setInterval(callAggregatorGrain, 1000);
+                document.getElementById("Color").innerText = "Waiting";
+                document.getElementById("IPAddress").innerText = "for Result...";
+                $.ajax({
+                    type: 'GET',
+                    url: '/Home/GetAggregatorGrainResult',
+                    data: { id: queuePosition },
+                    cache: false,
+                    success: function (result) {
+                        if (queuePosition < 19) {
+                            //// Because maximum queue size is 20.
+                            queuePosition += 1;
+                        } else {
+                            queuePosition = 0;
+                        }
+
+                        document.getElementById("aggregatorDisplay").style.backgroundColor = result.Color;
+                        document.getElementById("Color").innerText = result.Color;
+                        document.getElementById("IPAddress").innerText = "said " + result.IPAddress;
+                        timeoutHandle = window.setInterval(callAggregatorGrain, 1000);
+                    }
+                });
             }
         };
         $(function () {
