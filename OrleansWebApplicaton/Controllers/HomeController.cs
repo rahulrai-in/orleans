@@ -23,5 +23,12 @@ namespace OrleansWebApplicaton.Controllers
             Thread.Sleep(TimeSpan.FromSeconds(5));
             return this.Json(new AggragatorOutput() { Color = "Red", IPAddress = "10.0.0.1" }, JsonRequestBehavior.AllowGet);
         }
+
+        [HttpGet]
+        public JsonResult ActivateDeviceGrain(string color)
+        {
+            Thread.Sleep(TimeSpan.FromSeconds(5));
+            return null;
+        }
     }
 }

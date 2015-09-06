@@ -93,7 +93,16 @@
         $(function () {
             $("#colorSelector li").click(function () {
                 var text = $(this).text().trim();
-                document.getElementById("status").innerText = "Activating Grain @Routines.GetIPAddress() with value: " + text;
+                document.getElementById("status").innerText = "Activating Your Grain @Routines.GetIPAddress() with Value: " + text + ". Please Wait.";
+                $.ajax({
+                    type: 'GET',
+                    url: '/Home/ActivateDeviceGrain',
+                    data: { id: queuePosition },
+                    cache: false,
+                    success: function (result) {
+                        document.getElementById("status").innerText = "Grain State Saved! Wait for Your Color to Be Applied to All Devices!";
+                    }
+                });
                 return false;
             });
         });
