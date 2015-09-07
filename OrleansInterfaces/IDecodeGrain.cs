@@ -3,7 +3,7 @@ using Orleans;
 
 namespace OrleansInterfaces
 {
-    public interface IDecodeGrain : IGrainWithIntegerKey
+    public interface IDecodeGrain : IGrainWithStringKey
     {
         Task DecodeDeviceMessage(string ipAndColorMessage);
     }

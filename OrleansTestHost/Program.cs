@@ -26,6 +26,10 @@ using System.Threading.Tasks;
 
 namespace OrleansTestHost
 {
+    using Orleans;
+
+    using OrleansInterfaces;
+
     /// <summary>
     /// Orleans test silo host
     /// </summary>
@@ -49,12 +53,34 @@ namespace OrleansTestHost
             //       or initializing an HTTP front end for accepting incoming requests.
 
             Console.WriteLine("Orleans Silo is running.\nPress Enter to terminate...");
-            Console.ReadLine();
 
             //// Test Code Starts
-            
+            var decodeGrain = GrainClient.GrainFactory.GetGrain<IDecodeGrain>("10.0.0.0");
+            decodeGrain.DecodeDeviceMessage("10.0.0.0,VIOLET").Wait();
 
+            var aggregatorGrain = GrainClient.GrainFactory.GetGrain<IAggregatorGrain>("aggregator");
+            for (int i = 0; i < 5; i++)
+            {
+                Console.Write("Queue Item {0}: ", i);
+                var data = aggregatorGrain.GetGrainInformation(i).Result;
+                Console.WriteLine("Device: {0} Value: {1} Time: {2}", data.DeviceId, data.Value, data.Time);
+            }
 
+            decodeGrain = GrainClient.GrainFactory.GetGrain<IDecodeGrain>("10.0.0.1");
+            decodeGrain.DecodeDeviceMessage("10.0.0.1,RED").Wait();
+
+            decodeGrain = GrainClient.GrainFactory.GetGrain<IDecodeGrain>("10.0.0.2");
+            decodeGrain.DecodeDeviceMessage("10.0.0.2,YELLOW").Wait();
+
+            aggregatorGrain = GrainClient.GrainFactory.GetGrain<IAggregatorGrain>("aggregator");
+            for (int i = 0; i < 5; i++)
+            {
+                Console.Write("Queue Item {0}: ", i);
+                var data = aggregatorGrain.GetGrainInformation(i).Result;
+                Console.WriteLine("Device: {0} Value: {1} Time: {2}", data.DeviceId, data.Value, data.Time);
+            }
+
+            Console.ReadKey();
             //// Test Code Ends
 
             hostDomain.DoCallBack(ShutdownSilo);

@@ -11,7 +11,7 @@
 
     using OrleansInterfaces;
 
-    [StorageProvider(ProviderName = "AzureStorage")]
+    [StorageProvider(ProviderName = "AzureStore")]
     [Reentrant]
     public class AggregatorGrain : Grain<AggregatorGrainState>, IAggregatorGrain
     {
@@ -40,7 +40,13 @@
                 this.State.GrainInformation = new List<GrainInformation>();
             }
 
-            //// Don't add more than 20 requests in queue.
+            //// Don't add more than 20 requests in queue. If grain request is already present, delete and add it.
+            var existingGrain = this.State.GrainInformation.FirstOrDefault(element => element.DeviceId == grainInformation.DeviceId);
+            if (null != existingGrain)
+            {
+                this.State.GrainInformation.Remove(existingGrain);
+            }
+
             this.State.GrainInformation.Add(grainInformation);
             if (this.State.GrainInformation.Count > 20)
             {

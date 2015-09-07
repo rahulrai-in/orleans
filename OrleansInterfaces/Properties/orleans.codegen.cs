@@ -228,13 +228,13 @@ namespace OrleansInterfaces
         
 
                         [System.Obsolete("This method has been deprecated. Please use GrainFactory.GetGrain<IDecodeGrain> instead.")]
-                        public static IDecodeGrain GetGrain(long primaryKey)
+                        public static IDecodeGrain GetGrain(System.String primaryKey)
                         {
                             return Cast(global::Orleans.CodeGeneration.GrainFactoryBase.MakeGrainReferenceInternal(typeof(IDecodeGrain), primaryKey));
                         }
 
                         [System.Obsolete("This method has been deprecated. Please use GrainFactory.GetGrain<IDecodeGrain> instead.")]
-                        public static IDecodeGrain GetGrain(long primaryKey, string grainClassNamePrefix)
+                        public static IDecodeGrain GetGrain(System.String primaryKey, string grainClassNamePrefix)
                         {
                             return Cast(global::Orleans.CodeGeneration.GrainFactoryBase.MakeGrainReferenceInternal(typeof(IDecodeGrain), primaryKey, grainClassNamePrefix));
                         }
@@ -307,7 +307,8 @@ namespace OrleansInterfaces
             
             public override bool IsCompatible(int interfaceId)
             {
-                return (interfaceId == this.InterfaceId);
+                return ((interfaceId == this.InterfaceId) 
+                            || (interfaceId == -1277021679));
             }
             
             protected override string GetMethodName(int interfaceId, int methodId)
@@ -351,6 +352,11 @@ namespace OrleansInterfaces
                                 return ((IDecodeGrain)grain).DecodeDeviceMessage((String)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             default: 
                             throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
+                        }case -1277021679:  // IGrainWithStringKey
+                        switch (methodId)
+                        {
+                            default: 
+                            throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
                         }
                     default:
                         throw new System.InvalidCastException("interfaceId="+interfaceId);
@@ -376,6 +382,13 @@ namespace OrleansInterfaces
                         case -1195515568:
                             return "DecodeDeviceMessage";
                     
+                        default: 
+                            throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
+                    }
+                case -1277021679:  // IGrainWithStringKey
+                    switch (methodId)
+                    {
+                        
                         default: 
                             throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
                     }
