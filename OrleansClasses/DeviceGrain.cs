@@ -1,5 +1,7 @@
 ﻿namespace OrleansClasses
 {
+    #region
+
     using System;
     using System.Threading.Tasks;
 
@@ -9,10 +11,20 @@
 
     using OrleansInterfaces;
 
+    #endregion
+
     [StorageProvider(ProviderName = "AzureStore")]
     [Reentrant]
     public class DeviceGrain : Grain<DeviceGrainState>, IDeviceGrain
     {
+        #region Public Methods and Operators
+
+        public Task<string> GetColor()
+        {
+            //// This will get last stored color.
+            return Task.FromResult(this.State.Color);
+        }
+
         public async Task SetColor(string colorName)
         {
             //// This will save color to state and persist it to storage on executing WriteStateAsync.
@@ -23,14 +35,15 @@
             var aggregatorGrain = this.GrainFactory.GetGrain<IAggregatorGrain>("aggregator");
 
             //// Set information that aggregator grain would use.
-            var grainInformation = new GrainInformation { DeviceId = this.GetPrimaryKeyString(), Time = DateTime.Now, Value = colorName };
+            var grainInformation = new GrainInformation
+                {
+                    DeviceId = this.GetPrimaryKeyString(),
+                    Time = DateTime.Now,
+                    Value = colorName
+                };
             await aggregatorGrain.SetColor(grainInformation);
         }
 
-        public Task<string> GetColor()
-        {
-            //// This will get last stored color.
-            return Task.FromResult(this.State.Color);
-        }
+        #endregion
     }
 }

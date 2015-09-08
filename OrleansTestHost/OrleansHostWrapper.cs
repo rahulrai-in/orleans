@@ -1,43 +1,23 @@
-﻿/*
-Project Orleans Cloud Service SDK ver. 1.0
- 
-Copyright (c) Microsoft Corporation
- 
-All rights reserved.
- 
-MIT License
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and 
-associated documentation files (the ""Software""), to deal in the Software without restriction,
-including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
-and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so,
-subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS
-OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
-
-using System;
-using System.Net;
-using System.Threading.Tasks;
-
-using Orleans.Runtime.Host;
-
-namespace OrleansTestHost
+﻿namespace OrleansTestHost
 {
+    #region
+
+    using System;
+    using System.Net;
+
+    using Orleans.Runtime.Host;
+
+    #endregion
+
     internal class OrleansHostWrapper : IDisposable
     {
-        public bool Debug
-        {
-            get { return siloHost != null && siloHost.Debug; }
-            set { siloHost.Debug = value; }
-        }
+        #region Fields
 
         private SiloHost siloHost;
+
+        #endregion
+
+        #region Constructors and Destructors
 
         public OrleansHostWrapper(string[] args)
         {
@@ -45,9 +25,45 @@ namespace OrleansTestHost
             Init();
         }
 
+        #endregion
+
+        #region Public Properties
+
+        public bool Debug
+        {
+            get
+            {
+                return siloHost != null && siloHost.Debug;
+            }
+            set
+            {
+                siloHost.Debug = value;
+            }
+        }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        public void Dispose()
+        {
+            Dispose(true);
+        }
+
+        public void PrintUsage()
+        {
+            Console.WriteLine(@"USAGE: 
+    orleans host [<siloName> [<configFile>]] [DeploymentId=<idString>] [/debug]
+Where:
+    <siloName>      - Name of this silo in the Config file list (optional)
+    <configFile>    - Path to the Config file to use (optional)
+    DeploymentId=<idString> 
+                    - Which deployment group this host instance should run in (optional)");
+        }
+
         public bool Run()
         {
-            bool ok = false;
+            var ok = false;
 
             try
             {
@@ -57,11 +73,15 @@ namespace OrleansTestHost
 
                 if (ok)
                 {
-                    Console.WriteLine(string.Format("Successfully started Orleans silo '{0}' as a {1} node.", siloHost.Name, siloHost.Type));
+                    Console.WriteLine(
+                        "Successfully started Orleans silo '{0}' as a {1} node.",
+                        siloHost.Name,
+                        siloHost.Type);
                 }
                 else
                 {
-                    throw new SystemException(string.Format("Failed to start Orleans silo '{0}' as a {1} node.", siloHost.Name, siloHost.Type));
+                    throw new SystemException(
+                        string.Format("Failed to start Orleans silo '{0}' as a {1} node.", siloHost.Name, siloHost.Type));
                 }
             }
             catch (Exception exc)
@@ -76,13 +96,13 @@ namespace OrleansTestHost
 
         public bool Stop()
         {
-            bool ok = false;
+            var ok = false;
 
             try
             {
                 siloHost.StopOrleansSilo();
 
-                Console.WriteLine(string.Format("Orleans silo '{0}' shutdown.", siloHost.Name));
+                Console.WriteLine("Orleans silo '{0}' shutdown.", siloHost.Name);
             }
             catch (Exception exc)
             {
@@ -94,6 +114,16 @@ namespace OrleansTestHost
             return ok;
         }
 
+        #endregion
+
+        #region Methods
+
+        protected virtual void Dispose(bool dispose)
+        {
+            siloHost.Dispose();
+            siloHost = null;
+        }
+
         private void Init()
         {
             siloHost.LoadOrleansConfig();
@@ -103,13 +133,13 @@ namespace OrleansTestHost
         {
             string deploymentId = null;
 
-            string configFileName = "DevTestServerConfiguration.xml";
-            string siloName = Dns.GetHostName(); // Default to machine name
+            var configFileName = "DevTestServerConfiguration.xml";
+            var siloName = Dns.GetHostName(); // Default to machine name
 
-            int argPos = 1;
-            for (int i = 0; i < args.Length; i++)
+            var argPos = 1;
+            for (var i = 0; i < args.Length; i++)
             {
-                string a = args[i];
+                var a = args[i];
                 if (a.StartsWith("-") || a.StartsWith("/"))
                 {
                     switch (a.ToLowerInvariant())
@@ -125,9 +155,9 @@ namespace OrleansTestHost
                             return false;
                     }
                 }
-                else if (a.Contains("="))
+                if (a.Contains("="))
                 {
-                    string[] split = a.Split('=');
+                    var split = a.Split('=');
                     if (String.IsNullOrEmpty(split[1]))
                     {
                         Console.WriteLine("Bad command line arguments supplied: " + a);
@@ -169,32 +199,13 @@ namespace OrleansTestHost
             siloHost = new SiloHost(siloName);
             siloHost.ConfigFileName = configFileName;
             if (deploymentId != null)
+            {
                 siloHost.DeploymentId = deploymentId;
+            }
 
             return true;
         }
 
-        public void PrintUsage()
-        {
-            Console.WriteLine(
-@"USAGE: 
-    orleans host [<siloName> [<configFile>]] [DeploymentId=<idString>] [/debug]
-Where:
-    <siloName>      - Name of this silo in the Config file list (optional)
-    <configFile>    - Path to the Config file to use (optional)
-    DeploymentId=<idString> 
-                    - Which deployment group this host instance should run in (optional)");
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-        }
-
-        protected virtual void Dispose(bool dispose)
-        {
-            siloHost.Dispose();
-            siloHost = null;
-        }
+        #endregion
     }
 }

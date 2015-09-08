@@ -1,16 +1,22 @@
-using System.Threading.Tasks;
-using Orleans;
-
 namespace OrleansClasses
 {
+    #region
+
+    using System.Threading.Tasks;
+
+    using Orleans;
     using Orleans.Concurrency;
 
     using OrleansInterfaces;
+
+    #endregion
 
     [StatelessWorker]
     [Reentrant]
     public class DecodeGrain : Grain, IDecodeGrain
     {
+        #region Public Methods and Operators
+
         public Task DecodeDeviceMessage(string ipAndColorMessage)
         {
             var parts = ipAndColorMessage.Split(',');
@@ -19,5 +25,7 @@ namespace OrleansClasses
             //// No we'll pass color to the grain.
             return grain.SetColor(parts[1]);
         }
+
+        #endregion
     }
 }

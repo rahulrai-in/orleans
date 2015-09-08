@@ -57,10 +57,14 @@
   <ItemGroup>
     <Folder Include="OrleansWebApplicatonContent\" />
     <Folder Include="OrleansWorkerContent\" />
+    <Folder Include="Profiles" />
   </ItemGroup>
   <ItemGroup>
     <DiagnosticsConfiguration Include="OrleansWebApplicatonContent\diagnostics.wadcfgx" />
     <DiagnosticsConfiguration Include="OrleansWorkerContent\diagnostics.wadcfgx" />
+  </ItemGroup>
+  <ItemGroup>
+    <PublishProfile Include="Profiles\myorleansdemoProduction.azurePubxml" />
   </ItemGroup>
   <!-- Import the target files for this project template -->
   <PropertyGroup>

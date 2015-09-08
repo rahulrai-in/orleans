@@ -1,21 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.Optimization;
-using System.Web.Routing;
-
-namespace OrleansWebApplicaton
+﻿namespace OrleansWebApplicaton
 {
-    public class MvcApplication : System.Web.HttpApplication
+    #region
+
+    using System.Web;
+    using System.Web.Mvc;
+    using System.Web.Optimization;
+    using System.Web.Routing;
+
+    using Microsoft.WindowsAzure.ServiceRuntime;
+
+    using Orleans;
+    using Orleans.Runtime.Host;
+
+    #endregion
+
+    public class MvcApplication : HttpApplication
     {
+        #region Methods
+
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            if (RoleEnvironment.IsAvailable && !RoleEnvironment.IsEmulated)
+            {
+                AzureClient.Initialize(this.Server.MapPath("AzureClientConfiguration.xml"));
+            }
+            else
+            {
+                GrainClient.Initialize(this.Server.MapPath("AzureClientConfiguration.xml"));
+            }
         }
+
+        #endregion
     }
 }

@@ -494,16 +494,16 @@ namespace OrleansInterfaces
                 return DeviceGrainMethodInvoker.GetMethodName(interfaceId, methodId);
             }
             
-            System.Threading.Tasks.Task OrleansInterfaces.IDeviceGrain.SetColor(string @colorName)
-            {
-
-                return base.InvokeMethodAsync<object>(-1860597175, new object[] {@colorName} );
-            }
-            
             System.Threading.Tasks.Task<string> OrleansInterfaces.IDeviceGrain.GetColor()
             {
 
                 return base.InvokeMethodAsync<System.String>(1567424079, null );
+            }
+            
+            System.Threading.Tasks.Task OrleansInterfaces.IDeviceGrain.SetColor(string @colorName)
+            {
+
+                return base.InvokeMethodAsync<object>(-1860597175, new object[] {@colorName} );
             }
         }
     }
@@ -532,10 +532,10 @@ namespace OrleansInterfaces
                     case -2105953344:  // IDeviceGrain
                         switch (methodId)
                         {
-                            case -1860597175: 
-                                return ((IDeviceGrain)grain).SetColor((String)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case 1567424079: 
                                 return ((IDeviceGrain)grain).GetColor().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1860597175: 
+                                return ((IDeviceGrain)grain).SetColor((String)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             default: 
                             throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
                         }case -1277021679:  // IGrainWithStringKey
@@ -565,10 +565,10 @@ namespace OrleansInterfaces
                 case -2105953344:  // IDeviceGrain
                     switch (methodId)
                     {
-                        case -1860597175:
-                            return "SetColor";
-                    case 1567424079:
+                        case 1567424079:
                             return "GetColor";
+                    case -1860597175:
+                            return "SetColor";
                     
                         default: 
                             throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);

@@ -1,5 +1,7 @@
 ﻿namespace OrleansClasses
 {
+    #region
+
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -11,16 +13,20 @@
 
     using OrleansInterfaces;
 
+    #endregion
+
     [StorageProvider(ProviderName = "AzureStore")]
     [Reentrant]
     public class AggregatorGrain : Grain<AggregatorGrainState>, IAggregatorGrain
     {
+        #region Public Methods and Operators
+
         public Task<GrainInformation> GetGrainInformation(int position)
         {
             //// Filter out edge cases.
             if (this.State == null || this.State.GrainInformation.Count == 0 || position < 0 || position > 19)
             {
-                return null;
+                return Task.FromResult(new GrainInformation { DeviceId = "No Device", Value = "SKYBLUE", Time = DateTime.Now });
             }
 
             //// If index is out of range.
@@ -41,7 +47,8 @@
             }
 
             //// Don't add more than 20 requests in queue. If grain request is already present, delete and add it.
-            var existingGrain = this.State.GrainInformation.FirstOrDefault(element => element.DeviceId == grainInformation.DeviceId);
+            var existingGrain =
+                this.State.GrainInformation.FirstOrDefault(element => element.DeviceId == grainInformation.DeviceId);
             if (null != existingGrain)
             {
                 this.State.GrainInformation.Remove(existingGrain);
@@ -56,5 +63,7 @@
             //// Persist state.
             await this.WriteStateAsync();
         }
+
+        #endregion
     }
 }

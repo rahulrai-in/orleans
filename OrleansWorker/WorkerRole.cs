@@ -1,49 +1,41 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.WindowsAzure;
-using Microsoft.WindowsAzure.Diagnostics;
-using Microsoft.WindowsAzure.ServiceRuntime;
-using Microsoft.WindowsAzure.Storage;
-
 namespace OrleansWorker
 {
+    #region
+
+    using System.Diagnostics;
+    using System.Net;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    using Microsoft.WindowsAzure.ServiceRuntime;
+
+    using Orleans.Runtime.Host;
+
+    #endregion
+
     public class WorkerRole : RoleEntryPoint
     {
+        #region Fields
+
         private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+
         private readonly ManualResetEvent runCompleteEvent = new ManualResetEvent(false);
 
-        public override void Run()
-        {
-            Trace.TraceInformation("OrleansWorker is running");
+        private AzureSilo cloudSilo;
 
-            try
-            {
-                this.RunAsync(this.cancellationTokenSource.Token).Wait();
-            }
-            finally
-            {
-                this.runCompleteEvent.Set();
-            }
-        }
+        #endregion
+
+        #region Public Methods and Operators
 
         public override bool OnStart()
         {
             // Set the maximum number of concurrent connections
             ServicePointManager.DefaultConnectionLimit = 12;
 
-            // For information on handling configuration changes
-            // see the MSDN topic at http://go.microsoft.com/fwlink/?LinkId=166357.
+            this.cloudSilo = new AzureSilo();
+            var success = this.cloudSilo.Start();
 
-            bool result = base.OnStart();
-
-            Trace.TraceInformation("OrleansWorker has been started");
-
-            return result;
+            return success;
         }
 
         public override void OnStop()
@@ -58,6 +50,15 @@ namespace OrleansWorker
             Trace.TraceInformation("OrleansWorker has stopped");
         }
 
+        public override void Run()
+        {
+            this.cloudSilo.Run();
+        }
+
+        #endregion
+
+        #region Methods
+
         private async Task RunAsync(CancellationToken cancellationToken)
         {
             // TODO: Replace the following with your own logic.
@@ -67,5 +68,7 @@ namespace OrleansWorker
                 await Task.Delay(1000);
             }
         }
+
+        #endregion
     }
 }
