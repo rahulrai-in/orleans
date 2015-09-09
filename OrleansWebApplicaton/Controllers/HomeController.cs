@@ -8,6 +8,7 @@
     using System.Web.Mvc;
 
     using Orleans;
+    using Orleans.Runtime.Host;
 
     using OrleansInterfaces;
 
@@ -20,22 +21,37 @@
         #region Public Methods and Operators
 
         [HttpGet]
-        public Task ActivateDeviceGrain(string color)
+        public void ActivateDeviceGrain(string color)
         {
+            if (!AzureClient.IsInitialized)
+            {
+                AzureClient.Initialize(this.Server.MapPath("AzureClientConfiguration.xml"));
+            }
+
             var ipAddress = Routines.GetIPAddress();
             var decodeGrain = GrainClient.GrainFactory.GetGrain<IDecodeGrain>(ipAddress);
-            return decodeGrain.DecodeDeviceMessage(string.Format("{0},{1}", ipAddress, color));
+            decodeGrain.DecodeDeviceMessage(string.Format("{0},{1}", ipAddress, color)).Wait();
         }
 
         [HttpGet]
-        public Task<GrainInformation> GetAggregatorGrainResult(int id)
+        public GrainInformation GetAggregatorGrainResult(int id)
         {
+            if (!AzureClient.IsInitialized)
+            {
+                AzureClient.Initialize(this.Server.MapPath("AzureClientConfiguration.xml"));
+            }
+
             var aggregatorGrain = GrainClient.GrainFactory.GetGrain<IAggregatorGrain>("aggregator");
-            return aggregatorGrain.GetGrainInformation(id);
+            return aggregatorGrain.GetGrainInformation(id).Result;
         }
 
         public ActionResult Index()
         {
+            if (!AzureClient.IsInitialized)
+            {
+                AzureClient.Initialize(this.Server.MapPath("AzureClientConfiguration.xml"));
+            }
+
             //// This code does not work.
             var decodeGrain = GrainClient.GrainFactory.GetGrain<IDecodeGrain>("10.0.0.0");
             decodeGrain.DecodeDeviceMessage("10.0.0.0,VIOLET").Wait();

@@ -4,7 +4,7 @@
 	For a detailed reference, see "Orleans Configuration Reference.html".
 -->
 <ClientConfiguration xmlns="urn:orleans">
-  <GatewayProvider ProviderType="Config"/>
-  <Gateway Address="localhost" Port="30000"/>
-  <Statistics MetricsTableWriteInterval="30s" PerfCounterWriteInterval="30s" LogWriteInterval="300s" WriteLogStatisticsToTable="true"/>
+  <Tracing DefaultTraceLevel="Info" >
+    <TraceLevelOverride LogPrefix="Application" TraceLevel="Info" />
+  </Tracing>
 </ClientConfiguration>

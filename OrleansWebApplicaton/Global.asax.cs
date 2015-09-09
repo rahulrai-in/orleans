@@ -24,14 +24,7 @@
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-            if (RoleEnvironment.IsAvailable && !RoleEnvironment.IsEmulated)
-            {
-                AzureClient.Initialize(this.Server.MapPath("AzureClientConfiguration.xml"));
-            }
-            else
-            {
-                GrainClient.Initialize(this.Server.MapPath("AzureClientConfiguration.xml"));
-            }
+            //// AzureClient.Initialize(this.Server.MapPath("AzureClientConfiguration.xml"));
         }
 
         #endregion
