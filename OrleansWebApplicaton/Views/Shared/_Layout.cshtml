@@ -2,124 +2,130 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8"/>
+    <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Experiment for rahulrai.in</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" />
 </head>
 <body style="padding: 5px;">
-<style>
-    .row { overflow: hidden; }
+    <style>
+        .row {
+            overflow: hidden;
+        }
 
-    [class*="col-"] {
-        margin-bottom: -99999px;
-        padding-bottom: 99999px;
-    }
-</style>
-<h2>
-    Microsoft Orleans Experiment by Rahul Rai for <a href="http://rahulrai.in" target="_blank">rahulrai.in</a>
-</h2>
-<h4>
-    My Blog on This Experiment is Available <a href="http://rahulrai.in" target="_blank">Here</a>
-</h4>
-<hr/>
-<div class="visible-xs">
-    <h1>I don't think so that this experiment works on smaller screens. Please revisit this page with a higher resolution device.</h1>
-</div>
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-sm-12 text-center">
-            <h1 style="font-weight: bolder;">
-                Hi, Device @Routines.GetIPAddress()!
-            </h1>
+        [class*="col-"] {
+            margin-bottom: -99999px;
+            padding-bottom: 99999px;
+        }
+    </style>
+    <h2>
+        Microsoft Orleans Experiment
+    </h2>
+    @*<h2>
+            Microsoft Orleans Experiment by Rahul Rai for <a href="http://rahulrai.in" target="_blank">rahulrai.in</a>
+        </h2>
+        <h4>
+            My Blog on This Experiment is Available <a href="http://rahulrai.in" target="_blank">Here</a>
+        </h4>*@
+    <hr />
+    <div class="visible-xs">
+        <h1>I don't think that this experiment works on smaller screens. Please revisit this page with a higher resolution device.</h1>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12 text-center">
+                <h1 style="font-weight: bolder;">
+                    Hi, Device @Routines.GetIPAddress()!
+                </h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6 text-center" style="border-right: 2px solid gray;">
+                <h3>Aggregator Grain Query Countdown</h3>
+                <h3>Next call in <span id="countdown"></span> Seconds for Queue Position <span id="queuePosition"></span></h3>
+            </div>
+            <div class="col-sm-6 text-center">
+                <h3>Command Status</h3>
+                <h3>
+                    <span id="status">Waiting For Input</span>
+                </h3>
+            </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-sm-6 text-center" style="border-right: 2px solid gray;">
-            <h3>Aggregator Grain Query Countdown</h3>
-            <h3>Next call in <span id="countdown"></span> Seconds for Queue Position <span id="queuePosition"></span></h3>
-        </div>
-        <div class="col-sm-6 text-center">
-            <h3>Command Status</h3>
-            <h3>
-                <span id="status">Waiting For Input</span></h3>
-        </div>
-    </div>
-</div>
-<hr/>
-@RenderBody()
-@Scripts.Render("~/bundles/jquery")
-@Scripts.Render("~/bundles/bootstrap")
-@RenderSection("scripts", false)
-<script language="javascript">
-    var timeoutHandle;
-    var timeLimit = 5;
-    var currentTime = 0;
-    var queuePosition = 0;
-    var callAggregatorGrain = function() {
-        if (currentTime > 0) {
-            document.getElementById("countdown").innerText = currentTime;
-            document.getElementById("queuePosition").innerText = queuePosition;
-            currentTime -= 1;
-        } else {
-            clearTimeout(timeoutHandle);
-            currentTime = timeLimit;
-            document.getElementById("Color").innerText = "Waiting";
-            document.getElementById("IPAddress").innerText = "for Result...";
-            $.ajax({
-                type: 'GET',
-                url: '/Home/GetAggregatorGrainResult',
-                data: { id: queuePosition },
-                cache: false,
-                success: function(result) {
-                    if (queuePosition < 19) {
-                        //// Because maximum queue size is 20.
-                        queuePosition += 1;
-                    } else {
-                        queuePosition = 0;
+    <hr />
+    @RenderBody()
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", false)
+    <script language="javascript">
+        var timeoutHandle;
+        var timeLimit = 5;
+        var currentTime = 0;
+        var queuePosition = 0;
+        var callAggregatorGrain = function () {
+            if (currentTime > 0) {
+                document.getElementById("countdown").innerText = currentTime;
+                document.getElementById("queuePosition").innerText = queuePosition;
+                currentTime -= 1;
+            } else {
+                clearTimeout(timeoutHandle);
+                currentTime = timeLimit;
+                document.getElementById("Color").innerText = "Waiting";
+                document.getElementById("IPAddress").innerText = "for Result...";
+                $.ajax({
+                    type: 'GET',
+                    url: '/Home/GetAggregatorGrainResult',
+                    data: { id: queuePosition },
+                    cache: false,
+                    success: function (result) {
+                        if (queuePosition < 19) {
+                            //// Because maximum queue size is 20.
+                            queuePosition += 1;
+                        } else {
+                            queuePosition = 0;
+                        }
+
+                        document.getElementById("aggregatorDisplay").style.backgroundColor = result.Value;
+                        document.getElementById("Color").innerText = result.Value;
+                        document.getElementById("IPAddress").innerText = "said " + result.DeviceId;
+                        timeoutHandle = window.setInterval(callAggregatorGrain, 1000);
                     }
-
-                    document.getElementById("aggregatorDisplay").style.backgroundColor = result.Value;
-                    document.getElementById("Color").innerText = result.Value;
-                    document.getElementById("IPAddress").innerText = "said " + result.DeviceId;
-                    timeoutHandle = window.setInterval(callAggregatorGrain, 1000);
-                }
+                });
+            }
+        };
+        $(function () {
+            $("#colorSelector li").click(function () {
+                var text = $(this).text().trim();
+                document.getElementById("status").innerText = "Activating Your Grain @Routines.GetIPAddress() with Value: " + text + ". Please Wait.";
+                $.ajax({
+                    type: 'GET',
+                    url: '/Home/ActivateDeviceGrain',
+                    data: { color: text },
+                    cache: false,
+                    success: function (result) {
+                        document.getElementById("status").innerText = "Grain State Saved! Wait for Your Color to Be Applied to All Devices!";
+                    }
+                });
+                return false;
             });
-        }
-    };
-    $(function() {
-        $("#colorSelector li").click(function() {
-            var text = $(this).text().trim();
-            document.getElementById("status").innerText = "Activating Your Grain @Routines.GetIPAddress() with Value: " + text + ". Please Wait.";
-            $.ajax({
-                type: 'GET',
-                url: '/Home/ActivateDeviceGrain',
-                data: { color: text },
-                cache: false,
-                success: function(result) {
-                    document.getElementById("status").innerText = "Grain State Saved! Wait for Your Color to Be Applied to All Devices!";
-                }
+        });
+        $(document).ready(function () {
+            $(".dropdown").click(function () {
+                $(this).find(".dropdown-menu").slideToggle("fast");
             });
-            return false;
         });
-    });
-    $(document).ready(function() {
-        $(".dropdown").click(function() {
-            $(this).find(".dropdown-menu").slideToggle("fast");
+        $(document).on("click", function (event) {
+            var $trigger = $(".dropdown");
+            if ($trigger !== event.target && !$trigger.has(event.target).length) {
+                $(".dropdown-menu").slideUp("fast");
+            }
         });
-    });
-    $(document).on("click", function(event) {
-        var $trigger = $(".dropdown");
-        if ($trigger !== event.target && !$trigger.has(event.target).length) {
-            $(".dropdown-menu").slideUp("fast");
-        }
-    });
-    $(function() {
-        currentTime = timeLimit;
-        timeoutHandle = window.setInterval(callAggregatorGrain, 1000);
-    });
-</script>
+        $(function () {
+            currentTime = timeLimit;
+            timeoutHandle = window.setInterval(callAggregatorGrain, 1000);
+        });
+    </script>
 </body>
 </html>
